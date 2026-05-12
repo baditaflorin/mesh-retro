@@ -5,7 +5,7 @@
 - **Published cards** (`Y.Array<Card>`): `{ id, column, text, ts }`. No author
   field. See [ADR 0003](adr/0003-anonymity-via-no-from-field.md).
 - **Pending notes** (`Y.Map<peerId, Publisher>`): `{ tagId, pendingNote,
-  pendingColumn }` keyed by a stable per-device UUID. Correlatable to that
+pendingColumn }` keyed by a stable per-device UUID. Correlatable to that
   UUID, but only until the note is published — then `pendingNote` is set to
   `null` in the same transaction that publishes the `Card`.
 - **Votes** (`Y.Map<cardId, Y.Map<peerId, true>>`): who voted for what.
