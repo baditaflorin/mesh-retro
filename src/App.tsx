@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
+import { MeshShell } from "@baditaflorin/mesh-common";
 import { Retro, type Mode, type ColumnSet } from "./features/retro/Retro";
-import { SettingsDrawer } from "./features/settings/SettingsDrawer";
+import { SettingsExtras } from "./features/settings/SettingsExtras";
 import { appConfig } from "./shared/config";
-import { InviteShareButton, MeshBeacon } from "@baditaflorin/mesh-common";
 
 const STORAGE = {
   room: `${appConfig.storagePrefix}:room`,
@@ -43,7 +43,6 @@ export function App() {
     () => (readString(STORAGE.columnSet, "msg") as ColumnSet) || "msg",
   );
   const [isWall, setIsWall] = useState<boolean>(() => readBool(STORAGE.isWall, false));
-  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const [peerId] = useState(() => getOrCreatePeerId());
 
@@ -65,7 +64,23 @@ export function App() {
   }, [isWall]);
 
   return (
-    <div className="app-root">
+    <MeshShell
+      config={appConfig}
+      roomId={roomId}
+      onRoomChange={setRoomId}
+      settingsExtras={
+        <SettingsExtras
+          tagId={tagId}
+          onTagIdChange={setTagId}
+          mode={mode}
+          onModeChange={setMode}
+          columnSet={columnSet}
+          onColumnSetChange={setColumnSet}
+          isWall={isWall}
+          onIsWallChange={setIsWall}
+        />
+      }
+    >
       <Retro
         roomId={roomId}
         myTagId={tagId}
@@ -73,49 +88,9 @@ export function App() {
         mode={mode}
         columnSet={columnSet}
         isWall={isWall}
-        onOpenSettings={() => setSettingsOpen(true)}
+        // Settings live in MeshShell's drawer (top-right ⚙ FAB).
+        onOpenSettings={() => {}}
       />
-
-      <InviteShareButton appName={appConfig.appName} roomId={roomId} />
-      <MeshBeacon app={appConfig.appName} room={roomId} />
-
-      <button
-        type="button"
-        className="settings-fab"
-        onClick={() => setSettingsOpen(true)}
-        aria-label="Open settings"
-      >
-        ⚙
-      </button>
-
-      <div className="self-ref">
-        <a href={appConfig.repositoryUrl} target="_blank" rel="noreferrer">
-          source
-        </a>
-        <span aria-hidden="true">·</span>
-        <a href={appConfig.paypalUrl} target="_blank" rel="noreferrer">
-          tip ♥
-        </a>
-        <span aria-hidden="true">·</span>
-        <span>
-          v{appConfig.version} · {appConfig.commit}
-        </span>
-      </div>
-
-      <SettingsDrawer
-        open={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-        roomId={roomId}
-        onRoomChange={setRoomId}
-        tagId={tagId}
-        onTagIdChange={setTagId}
-        mode={mode}
-        onModeChange={setMode}
-        columnSet={columnSet}
-        onColumnSetChange={setColumnSet}
-        isWall={isWall}
-        onIsWallChange={setIsWall}
-      />
-    </div>
+    </MeshShell>
   );
 }

@@ -1,6 +1,9 @@
 export const appConfig = {
   appName: "mesh-retro",
   storagePrefix: "mesh-retro",
+  description:
+    "Peer-to-peer mesh: anonymous retro board. Mad/Sad/Glad + dot voting. ArUco mode for hands-free wall publish.",
+  accentHex: "#7dd181",
   version: __APP_VERSION__,
   commit: __GIT_COMMIT__,
   repositoryUrl: "https://github.com/baditaflorin/mesh-retro",
