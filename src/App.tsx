@@ -81,6 +81,7 @@ export function App() {
         />
       }
     >
+      {/* Settings live in MeshShell's drawer (top-right ⚙ FAB). */}
       <Retro
         roomId={roomId}
         myTagId={tagId}
@@ -88,8 +89,6 @@ export function App() {
         mode={mode}
         columnSet={columnSet}
         isWall={isWall}
-        // Settings live in MeshShell's drawer (top-right ⚙ FAB).
-        onOpenSettings={() => {}}
       />
     </MeshShell>
   );

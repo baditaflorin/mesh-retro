@@ -18,6 +18,9 @@ const storagePrefix = pkg.name;
  *   1. Peer A composes a card and taps "Send to wall" → peer B sees the card.
  *   2. Peer A switches to the vote phase and casts a dot vote → peer B sees the
  *      same phase change AND the updated vote tally (●1) on the shared card.
+ *   3. Peer B votes too → peer A sees ●2 (both peers' votes merge in one tally).
+ *   4. Peer A switches to the action phase → peer B sees the phase change AND
+ *      the top-voted card highlighted as an action item.
  *
  * This fails on any regression that routes cards/votes through React useState
  * instead of the Yjs doc (yCards / yVotes / yState), or that forgets the
@@ -57,6 +60,24 @@ test("peer A's card and dot vote propagate to peer B over the mesh", async ({
     await expect(
       b.locator(".retro-card", { hasText: cardText }).locator(".retro-card-dots"),
     ).toHaveText("●1");
+
+    // Peer B also votes on the same card (a vote from the OPPOSITE peer).
+    await b.locator(".retro-card", { hasText: cardText }).click();
+
+    // CROSS-PEER ASSERTION 4: peer A now sees ●2 — both peers' votes are
+    // merged into the same Y.Map<peerId> tally, not double-counted or lost.
+    await expect(
+      a.locator(".retro-card", { hasText: cardText }).locator(".retro-card-dots"),
+    ).toHaveText("●2");
+
+    // Peer A advances the shared phase to "action" (the third advertised phase).
+    await a.locator(".retro-phase-btn", { hasText: "Action" }).click();
+
+    // CROSS-PEER ASSERTION 5: the action phase + top-3 highlight propagate.
+    // Peer B sees the phase flip AND the most-voted card highlighted as a
+    // top action item — proving the action view is shared, not per-peer.
+    await expect(b.locator(".retro-hud")).toContainText("phase: action");
+    await expect(b.locator(".retro-card", { hasText: cardText })).toHaveClass(/retro-card-top/);
   } finally {
     await cleanup();
   }

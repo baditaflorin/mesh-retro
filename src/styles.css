@@ -88,15 +88,12 @@ body,
   letter-spacing: 0.02em;
 }
 
-.retro-arm-secondary {
-  margin-top: 0.7rem;
-  padding: 0.5rem 1rem;
-  background: transparent;
+.retro-empty {
+  margin: 1.2rem auto 0;
+  max-width: 32rem;
+  text-align: center;
+  font-size: 0.9rem;
   color: var(--muted);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 999px;
-  font-size: 0.85rem;
-  cursor: pointer;
 }
 
 .retro-hint {

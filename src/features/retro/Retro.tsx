@@ -45,18 +45,9 @@ type Props = {
   mode: Mode;
   columnSet: ColumnSet;
   isWall: boolean;
-  onOpenSettings: () => void;
 };
 
-export function Retro({
-  roomId,
-  myTagId,
-  myPeerId,
-  mode,
-  columnSet,
-  isWall,
-  onOpenSettings,
-}: Props) {
+export function Retro({ roomId, myTagId, myPeerId, mode, columnSet, isWall }: Props) {
   const [armed, setArmed] = useState(false);
   const [cards, setCards] = useState<Card[]>([]);
   const [votes, setVotes] = useState<Record<string, Set<string>>>({});
@@ -336,12 +327,13 @@ export function Retro({
         <button type="button" className="retro-arm-button" onClick={arm}>
           {isWall ? "Open the wall display" : "Join the retro"}
         </button>
-        <button type="button" className="retro-arm-secondary" onClick={onOpenSettings}>
-          Open settings
-        </button>
         <p className="retro-hint">
           Room <code>{roomId}</code> · {COLUMN_LABELS[columnSet].mad}/{COLUMN_LABELS[columnSet].sad}
           /{COLUMN_LABELS[columnSet].glad}
+        </p>
+        <p className="retro-hint">
+          Open another tab on this same link to join as a second phone. Tap the ⚙ button (top-right)
+          to change room, tag, or columns.
         </p>
       </div>
     );
@@ -465,6 +457,16 @@ export function Retro({
           </div>
         ))}
       </div>
+
+      {cards.length === 0 && (
+        <p className="retro-empty">
+          {state.phase === "compose"
+            ? isWall
+              ? "No cards yet. Phones in this room can type a card and send it to the wall."
+              : "No cards yet. Write a card above and tap “Send to wall.”"
+            : "No cards to show yet — switch to Compose to add some."}
+        </p>
+      )}
 
       {state.phase === "vote" && (
         <div className="retro-vote-hud">

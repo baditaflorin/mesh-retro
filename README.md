@@ -15,6 +15,14 @@ anonymous — the data model literally has no author field on published cards
 phases: **compose** (type and publish), **vote** (3 dots per person),
 **action** (top 3 highlighted, export as markdown).
 
+## Try it in 2 tabs
+
+Open the [live app](https://baditaflorin.github.io/mesh-retro/) in two
+browser tabs (same link = same room). In tab one, type a card and tap **Send
+to wall** — it appears in tab two instantly. Switch to the **Vote** phase and
+dot-vote; the tally syncs both ways. That's the whole mesh: no server, no
+login, no install.
+
 ## How it works
 
 1. Every phone joins a shared **Yjs document** over **y-webrtc** via my
